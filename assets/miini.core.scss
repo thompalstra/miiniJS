@@ -1,0 +1,160 @@
+@import "./_partial_variables.scss";
+
+.wrap{
+  margin: 0 auto;
+}
+
+[class*="cw-"],
+[class*="ch-"]{
+  display: inline-block;
+  float: left;
+}
+
+@media ( min-width: $query-xs ){
+  .cw-xs-100{ width: $w100; }
+  .cw-xs-90{ width: $w90; }
+  .cw-xs-80{ width: $w80; }
+  .cw-xs-75{ width: $w75; }
+  .cw-xs-66{ width: $w66; }
+  .cw-xs-50{ width: $w50; }
+  .cw-xs-33{ width: $w33; }
+  .cw-xs-25{ width: $w25; }
+  .cw-xs-20{ width: $w20; }
+  .cw-xs-10{ width: $w10; }
+
+  .ch-xs-100{ padding-bottom: $w100; }
+  .ch-xs-90{ padding-bottom: $w90; }
+  .ch-xs-80{ padding-bottom: $w80; }
+  .ch-xs-75{ padding-bottom: $w75; }
+  .ch-xs-66{ padding-bottom: $w66; }
+  .ch-xs-50{ padding-bottom: $w50; }
+  .ch-xs-33{ padding-bottom: $w33; }
+  .ch-xs-25{ padding-bottom: $w25; }
+  .ch-xs-20{ padding-bottom: $w20; }
+  .ch-xs-10{ padding-bottom: $w10; }
+
+  .wrap{
+    width: $query-xs;
+  }
+}
+@media ( min-width: $query-sm ){
+  .cw-sm-100{ width: $w100; }
+  .cw-sm-90{ width: $w90; }
+  .cw-sm-80{ width: $w80; }
+  .cw-sm-75{ width: $w75; }
+  .cw-sm-66{ width: $w66; }
+  .cw-sm-50{ width: $w50; }
+  .cw-sm-33{ width: $w33; }
+  .cw-sm-25{ width: $w25; }
+  .cw-sm-20{ width: $w20; }
+  .cw-sm-10{ width: $w10; }
+
+  .ch-sm-100{ padding-bottom: $w100; }
+  .ch-sm-90{ padding-bottom: $w90; }
+  .ch-sm-80{ padding-bottom: $w80; }
+  .ch-sm-75{ padding-bottom: $w75; }
+  .ch-sm-66{ padding-bottom: $w66; }
+  .ch-sm-50{ padding-bottom: $w50; }
+  .ch-sm-33{ padding-bottom: $w33; }
+  .ch-sm-25{ padding-bottom: $w25; }
+  .ch-sm-20{ padding-bottom: $w20; }
+  .ch-sm-10{ padding-bottom: $w10; }
+
+  .wrap{
+    width: $query-sm;
+  }
+}
+@media ( min-width: $query-md ){
+  .cw-md-100{ width: $w100; }
+  .cw-md-90{ width: $w90; }
+  .cw-md-80{ width: $w80; }
+  .cw-md-75{ width: $w75; }
+  .cw-md-66{ width: $w66; }
+  .cw-md-50{ width: $w50; }
+  .cw-md-33{ width: $w33; }
+  .cw-md-25{ width: $w25; }
+  .cw-md-20{ width: $w20; }
+  .cw-md-10{ width: $w10; }
+
+  .ch-md-100{ padding-bottom: $w100; }
+  .ch-md-90{ padding-bottom: $w90; }
+  .ch-md-80{ padding-bottom: $w80; }
+  .ch-md-75{ padding-bottom: $w75; }
+  .ch-md-66{ padding-bottom: $w66; }
+  .ch-md-50{ padding-bottom: $w50; }
+  .ch-md-33{ padding-bottom: $w33; }
+  .ch-md-25{ padding-bottom: $w25; }
+  .ch-md-20{ padding-bottom: $w20; }
+  .ch-md-10{ padding-bottom: $w10; }
+
+  .wrap{
+    width: $query-md;
+  }
+}
+@media ( min-width: $query-lg ){
+  .cw-lg-100{ width: $w100; }
+  .cw-lg-90{ width: $w90; }
+  .cw-lg-80{ width: $w80; }
+  .cw-lg-75{ width: $w75; }
+  .cw-lg-66{ width: $w66; }
+  .cw-lg-50{ width: $w50; }
+  .cw-lg-33{ width: $w33; }
+  .cw-lg-25{ width: $w25; }
+  .cw-lg-20{ width: $w20; }
+  .cw-lg-10{ width: $w10; }
+
+  .ch-lg-100{ padding-bottom: $w100; }
+  .ch-lg-90{ padding-bottom: $w90; }
+  .ch-lg-80{ padding-bottom: $w80; }
+  .ch-lg-75{ padding-bottom: $w75; }
+  .ch-lg-66{ padding-bottom: $w66; }
+  .ch-lg-50{ padding-bottom: $w50; }
+  .ch-lg-33{ padding-bottom: $w33; }
+  .ch-lg-25{ padding-bottom: $w25; }
+  .ch-lg-20{ padding-bottom: $w20; }
+  .ch-lg-10{ padding-bottom: $w10; }
+
+  .wrap{
+    width: $query-lg;
+  }
+}
+@media ( min-width: $query-xl ){
+  .cw-xl-100{ width: $w100; }
+  .cw-xl-90{ width: $w90; }
+  .cw-xl-80{ width: $w80; }
+  .cw-xl-75{ width: $w75; }
+  .cw-xl-66{ width: $w66; }
+  .cw-xl-50{ width: $w50; }
+  .cw-xl-33{ width: $w33; }
+  .cw-xl-25{ width: $w25; }
+  .cw-xl-20{ width: $w20; }
+  .cw-xl-10{ width: $w10; }
+
+  .ch-xl-100{ padding-bottom: $w100; }
+  .ch-xl-90{ padding-bottom: $w90; }
+  .ch-xl-80{ padding-bottom: $w80; }
+  .ch-xl-75{ padding-bottom: $w75; }
+  .ch-xl-66{ padding-bottom: $w66; }
+  .ch-xl-50{ padding-bottom: $w50; }
+  .ch-xl-33{ padding-bottom: $w33; }
+  .ch-xl-25{ padding-bottom: $w25; }
+  .ch-xl-20{ padding-bottom: $w20; }
+  .ch-xl-10{ padding-bottom: $w10; }
+
+  .wrap{
+    width: $query-xl;
+  }
+}
+
+.gridify{
+  .column{
+    .block{
+      position: relative;
+      .content{
+        position: absolute;
+        top: 5px; left: 5px; right: 5px; bottom: 5px;
+        background-color: #f2f2f2;
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="./assets/miini.core.css" rel="stylesheet"/>
+    <script src="./assets/miini.core.js"></script>
+    <title>Application</title>
+  </head>
+  <body>
+    <div id='main' role='main' data-eval-js>
+
+    </div>
+    <script>
+      var main = document.findById('main');
+      doc.on('ready', function(){
+        main.load({
+          url: './www/default/index.html',
+          onsuccess: ( event ) => {
+            console.log('load usccess');
+          },
+          onerror: ( event ) => {
+            console.log('load error');
+          }
+        })
+      });
+      doc.on('click', 'a[href]', function(e){
+        e.preventDefault();
+
+        main.data('loading', '');
+        main.load({
+          url: this.href,
+          onsuccess: ( event ) => {
+            console.log('load usccess');
+          },
+          onerror: ( event ) => {
+            console.log('load error');
+          }
+        })
+      });
+    </script>
+  </body>
+</html>
