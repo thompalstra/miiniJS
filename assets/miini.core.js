@@ -95,19 +95,32 @@ extend( mii ).with({
 }, true)
 
 extend( Document ).with( {
-  create: function( tag, options ){
-    var el = document.createElement( tag );
-
-    if( typeof options == 'object' ){
-      for( var i in options ){
-        if( typeof el[i] !== 'undefined' ){
-          el[i] = options[i];
+  create: function( a, b ){
+    if( typeof a == 'string' && a.length > 0 ){
+      if( a[0] == '<' ){
+        var div = document.createElement( 'div' );
+        div.innerHTML = a;
+        if( div.children > 1 ){
+          return div.childNodes;
         } else {
-          el.setAttribute( i, options[i] );
+          return div.childNodes[0];
+        }
+
+      } else {
+        var html = document.createElement( a );
+
+        if( typeof b == 'object' ){
+          for( var i in b ){
+            if( typeof html[i] !== 'undefined' ){
+              html[i] = b[i];
+            } else {
+              html.setAttribute( i, b[i] );
+            }
+          }
         }
       }
     }
-    return el;
+    return html;
   }
 } )
 
@@ -160,14 +173,14 @@ extend( HTMLElement, Document ).with({
       if( typeof value === 'undefined' ){
         return this.dataset[ key ];
       } else if( value == null ){
-        this.dataset[key] = null;
+        delete this.dataset[key];
       } else {
         this.dataset[key] = value;
       }
     } else if( typeof key === 'object' ){
       for( var i in key ){
         if( key[i] == null ){
-          this.dataset[i] = null;
+          delete this.dataset[key];
         } else {
           this.dataset[i] = key[i];
         }
@@ -230,9 +243,24 @@ extend( HTMLElement, Document ).with({
             node.parentNode.replaceChild( newScript, node ).innerHTML = node.innerHTML;
           } );
         }
+        this.xhrObject.onsuccess.call( this, this.xhr );
       }
     }.bind( this );
     this.xhr.send( this.xhrObject.data );
+  },
+  fullscreen: function(){
+    if (this.requestFullscreen) {
+        this.requestFullscreen();
+    }
+    else if (this.mozRequestFullScreen) {
+        this.mozRequestFullScreen();
+    }
+    else if (this.webkitRequestFullScreen) {
+        this.webkitRequestFullScreen();
+    }
+    else if (this.msRequestFullscreen) {
+        this.msRequestFullscreen();
+    }
   },
   isInViewport: function( topOffset, rightOffset, bottomOffset, leftOffset,  ){
     var rect = this.getBoundingClientRect();
@@ -266,12 +294,55 @@ extend( HTMLCollection, NodeList ).with({
   }
 })
 
+extend( Object ).with( {
+  flatten: function( input, fa ){
+    let output = {};
+
+    Object.keys( input ).forEach( function( key ) {
+
+      if( input[ key ] == null ){
+        output[ key ] = 'unknown';
+      } else if ( ( typeof input[ key ] == 'object' ) && ( ( fa == true && Array.isArray( input[ key ] ) ) || ( !Array.isArray( input[ key ] ) ) ) ) {
+        var _input = Object.flatten( input[ key ], fa );
+        Object.keys( _input ).forEach( function( innerKey ) {
+          output[ key + '.' + innerKey ] = _input[ innerKey ];
+        } );
+      } else {
+        output[ key ] = input[ key ];
+      }
+
+
+    } );
+  	return output;
+  }
+} );
+
 extend( mii ).with( {
-  Gridify: function( element ){
+  template: {
+    render: function( content, data ){
+      var values = Object.flatten( data );
+      Object.keys( values ).forEach( ( key ) => {
+        var value = values[ key ];
+        var key = "{" + key + "}";
+        content = content.replace( new RegExp( key , 'g'), value );
+      } );
+      return content;
+    }
+  },
+  Gridify: function( element, options ){
     this.element = element;
     this.columns = this.element.find( '.column' );
     this.smallestColumn = null;
     this.topOffset = -300;
+
+    this.itemTemplate = '';
+
+    if( typeof options == 'object' ){
+      for( var i in options ){
+        this[i] = options[i];
+      }
+    }
+
     this.pager = this.element.appendChild( document.create( 'div', {
       className: 'pager',
       style: 'float: right; width: 100%'
@@ -279,16 +350,16 @@ extend( mii ).with( {
 
     this.registerEventListeners = function(){
       window.addEventListener( 'scroll', ( event ) => {
-        // console.log( this.pager.isInViewport( this.topOffset ) );
-        if( this.pager.isInViewport( this.topOffset ) ){
-          this.paginate();
+        if( this.pager.isInViewport( this.topOffset ) && this.xhr == null ){
+          this.nextPage();
         }
       });
     }
-    this.paginate = function(){
+    this.nextPage = function( itemCreatedCallback ){
       var page = parseInt( this.element.getAttribute('data-page') );
       var perPage = parseInt( this.element.getAttribute('data-per-page') );
       var params = deserialize(  location.search.substring( 1, location.search.length ) );
+
       params['per-page'] = perPage;
       params['page'] = page;
 
@@ -301,26 +372,36 @@ extend( mii ).with( {
       this.xhr.responseType = 'json';
       this.xhr.setRequestHeader( 'content-type', 'application/json' );
       this.xhr.onreadystatechange = function( event ){
-        if( this.xhr.readyState == 4 && this.xhr.status == 200 ){
-          if( this.xhr.response.success ){
-            this.xhr.response.items.forEach( ( item ) => {
-              console.log("height: " + item.image.small.height);
-            this.add( document.create( 'div', {
-                className: 'block cw-xs-100',
-                style: "height: " + item.image.small.height,
-                innerHTML: '<div class="content" style="background-image:url( ' + item.image.small.url + ' )" ></div>'
-              } ) )
-            } );
+        if( this.xhr.readyState == 4 ){
+          if( this.xhr.status == 200 ){
+            if( this.xhr.response.success ){
+              this.xhr.response.items.forEach( ( item ) => {
+                var element = document.createElement( 'div' );
+                element.className = 'item';
+                element.innerHTML = mii.template.render( this.itemTemplate, item );
+                element.attr('data-loading', '');
+                element.attr('data-load-type', 'bounce');
+
+                this.add( element, item );
+              } );
+            }
           }
+          this.xhr = null;
         }
       }.bind(this);
       this.xhr.send();
 
       this.element.setAttribute('data-page', ++page );
     }
-    this.add = function( element ){
-      this.getSmallestColumn().appendChild( element );
+    this.add = function( element, item ){
+      var element = this.getSmallestColumn().appendChild( element );
       this.smallestColumn = this.getSmallestColumn();
+
+      var event = new CustomEvent( 'add' );
+      event.relatedElement = element;
+      event.relatedItem = item;
+
+      this.element.dispatchEvent( event );
     }
     this.getSmallestColumn = function(  ){
       var shortest = null;
@@ -331,8 +412,7 @@ extend( mii ).with( {
       } )
       return shortest;
     }
-
     this.registerEventListeners();
-    this.paginate();
+    this.nextPage();
   }
 }, true )

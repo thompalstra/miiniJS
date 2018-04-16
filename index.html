@@ -22,16 +22,18 @@
           }
         })
       });
-      doc.on('click', 'a[href]', function(e){
+      doc.on('click', 'a[href][data-process]', function(e){
         e.preventDefault();
 
         main.data('loading', '');
         main.load({
           url: this.href,
           onsuccess: ( event ) => {
+            main.data('loading', null);
             console.log('load usccess');
           },
           onerror: ( event ) => {
+            main.data('loading', null);
             console.log('load error');
           }
         })

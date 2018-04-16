@@ -1,29 +1,213 @@
+<style>
+  body{
+      background-color: #ddd;
+  }
+  .gridify .column{
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  .gridify > .column > .item{
+    margin-bottom: 10px;
+  }
+
+  .gridify .column .block{
+    border: 1px solid #ccc;
+    background-color: white;
+    transition: .6s;
+  }
+  .gridify > .column > .item > .block > .content{
+    background-size: cover;
+  }
+  .gridify .popover{
+    width: 80%;
+    text-align: center;
+  }
+  .gridify .column .item:not([data-loading]) .block:hover{
+    transform: scale( 1.1 );
+    z-index: 1000;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+  }
+
+  .post-link{
+
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+
+    color: #ddd;
+    background-color: transparent;
+
+    padding: 5px;
+    border-radius: 0%;
+
+    text-decoration: none;
+
+    z-index: 1;
+
+    transition: .3s;
+
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+
+  }
+
+  .post-link:hover{
+    color: #333;
+    background-color: #ddd;
+    border-radius: 100%;
+  }
+
+  .gridify .column .item:hover .post-link{
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+  }
+
+  .gridify.gridify-detail{
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 10000;
+
+    transition: .3s;
+
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .gridify.gridify-detail:before{
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,.95);
+  }
+  .gridify.gridify-detail img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    min-width: 30%;
+    max-width: 80%;
+    min-height: 80%;
+  }
+
+  .gridify.gridify-detail.show{
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+    overflow-y: scroll;
+  }
+
+  .gridify.gridify-detail .content{
+    bottom: 0;
+    position: fixed;
+    color: #ddd;
+    padding: 20px;
+    left: 0px;
+    text-align: center;
+    right: 0px;
+    background-color: rgba(0,0,0,.5);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: .3s;
+  }
+
+  .gridify.gridify-detail .post-link{
+
+    position: fixed;
+    right: 22px;
+
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+  }
+
+  .gridify.gridify-detail img:hover ~ .content{
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+  }
+
+</style>
 <div class='wrap'>
-  <a href="./www/default/contact.html">contact</a>
+  <a href="./www/default/contact.html" data-process>contact</a>
 </div>
 <div class='wrap'>
-  <div id='grid' class='gridify cw-xs-100' data-page="0" data-per-page="20" data-url="./infinite.php">
-    <div class='column cw-xs-25'>
+  <div id='grid-view' class='gridify gridify-detail pop'>
+    <img src=""/>
+    <a class="post-link material-icons" href="" target="_blank">open_in_new</a>
+    <div class="content"></div>
+  </div>
 
+  <div class='cw-xs-100'>
+    <div class='cw-lg-25'>
+      heyo
     </div>
-    <div class='column cw-xs-25'>
+    <div class='cw-lg-75'>
+      <div id='grid' class='gridify cw-xs-100' data-page="0" data-per-page="20" data-url="./infinite.php">
+        <div class='column cw-xs-33'>
 
-    </div>
-    <div class='column cw-xs-25'>
+        </div>
+        <div class='column cw-xs-33'>
 
-    </div>
-    <div class='column cw-xs-25'>
+        </div>
+        <div class='column cw-xs-33'>
 
+        </div>
+      </div>
     </div>
   </div>
 </div>
 <script>
-  var grid = new mii.Gridify( doc.findById( 'grid' ) );
-  // var h = ( Math.random() * 100 ).toFixed();
-	// console.log(  "padding-bottom: " + h + "%" );
-  // grid.add( doc.create( 'div', {
-  //   className: 'block cw-xs-100 ch-xs-100',
-  //   style: "padding-bottom: " + h + "%",
-  //   innerHTML: '<div class="content"></div>',
-  // } ) )
+  var grid = new mii.Gridify( doc.findById( 'grid' ), {
+    topOffset: -600,
+    itemTemplate:
+      '<div class="block cw-xs-100 pop" data-content="{title} {description}" data-link="{link}" data-image="{image.small.url}" style="padding-bottom:{image.small.bottom}">\
+        <a class="post-link material-icons" href="{link}" target="_blank">open_in_new</a>\
+        <div class="popover bottom center">\
+          <div class="content">{title} {description}</div>\
+        </div>\
+        {content}\
+        </div>\
+      </div>'
+  } );
+</script>
+<script>
+  document.on( 'click', '#grid .block', function( event ) {
+    document.one( '#grid-view img' ).src = '';
+    document.one( '#grid-view img' ).src = this.dataset.image;
+    document.one( '#grid-view .content').innerHTML = this.dataset.content;
+    document.one( '#grid-view .post-link').href = this.dataset.link;
+    document.one( '#grid-view').classList.add('show');
+    document.one( 'body' ).style['overflow'] = 'hidden';
+  } );
+  document.one( '#grid-view').on('click', function( event ){
+    document.one( '#grid-view').classList.remove('show');
+    document.one( 'body' ).style['overflow'] = '';
+  });
+
+  document.one( '#grid' ).on( 'add', function( event ){
+    if( event.relatedItem.hasOwnProperty('image') && event.relatedItem.image.hasOwnProperty('small') && event.relatedItem.image.small.hasOwnProperty('url') ){
+      var img = new Image();
+      img.parent = event.relatedElement;
+      img.src = event.relatedItem.image.small.url;
+      img.onload = function(e){
+        this.parent.attr('data-loading', null);
+        clearTimeout( this.timeout );
+      }.bind(img);
+
+      this.timeout = setTimeout( function( event ) {
+        this.parent.attr('data-loading', null);
+      }.bind( img ), 5000 );
+    }
+  } );
 </script>
