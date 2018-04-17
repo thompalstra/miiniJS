@@ -168,15 +168,16 @@
   </div>
 </div>
 <script>
+
   var grid = new mii.Gridify( doc.findById( 'grid' ), {
     topOffset: -600,
     itemTemplate:
-      '<div class="block cw-xs-100 pop" data-content="{title} {description}" data-link="{link}" data-image="{image.small.url}" style="padding-bottom:{image.small.bottom}">\
-        <a class="post-link material-icons" href="{link}" target="_blank">open_in_new</a>\
+      '<div class="block cw-xs-100 pop" data-content="<%title%> <%description%>" data-link="<%link%>" data-image="<%image.small.url%>" style="padding-bottom:<%image.small.bottom%>">\
+        <a class="post-link material-icons" href="<%link%>" target="_blank">open_in_new</a>\
         <div class="popover bottom center">\
-          <div class="content">{title} {description}</div>\
+          <div class="content"><%title%> <%description%></div>\
         </div>\
-        {content}\
+        <%content%>\
         </div>\
       </div>'
   } );

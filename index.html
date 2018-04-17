@@ -30,11 +30,9 @@
           url: this.href,
           onsuccess: ( event ) => {
             main.data('loading', null);
-            console.log('load usccess');
           },
           onerror: ( event ) => {
             main.data('loading', null);
-            console.log('load error');
           }
         })
       });

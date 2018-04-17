@@ -60,6 +60,9 @@ extend( mii ).with({
       onsuccess: function(){},
       onerror: function(){},
       data: {}
+    },
+    template:{
+      tags: [ "<%", "%>" ]
     }
   },
   validateXhrObject: function( obj ){
@@ -296,10 +299,8 @@ extend( HTMLCollection, NodeList ).with({
 
 extend( Object ).with( {
   flatten: function( input, fa ){
-    let output = {};
-
+    let output = {};    
     Object.keys( input ).forEach( function( key ) {
-
       if( input[ key ] == null ){
         output[ key ] = 'unknown';
       } else if ( ( typeof input[ key ] == 'object' ) && ( ( fa == true && Array.isArray( input[ key ] ) ) || ( !Array.isArray( input[ key ] ) ) ) ) {
@@ -310,8 +311,6 @@ extend( Object ).with( {
       } else {
         output[ key ] = input[ key ];
       }
-
-
     } );
   	return output;
   }
@@ -319,11 +318,12 @@ extend( Object ).with( {
 
 extend( mii ).with( {
   template: {
-    render: function( content, data ){
+    render: function( content, data, options ){
+      var tags = ( typeof options === 'object' && options.hasOwnProperty('tags') ) ? options.tags : mii.defaults.template.tags;
       var values = Object.flatten( data );
       Object.keys( values ).forEach( ( key ) => {
         var value = values[ key ];
-        var key = "{" + key + "}";
+        var key = tags[0] + key + tags[1];
         content = content.replace( new RegExp( key , 'g'), value );
       } );
       return content;
